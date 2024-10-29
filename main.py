@@ -249,7 +249,7 @@ def display_dash(df):
         # st.progress(altitude / 20000 * 100, text="Percent of max altitude")
         temperature, t_delta = get_metric_delta(df, 'temperature')
         st.metric("Temperature", f"{temperature:.2f} °C", delta=t_delta)
-        speed, s_delta = get_metric_delta(df, 'temperature')
+        speed, s_delta = get_metric_delta(df, 'speed')
         st.metric("Speed", f"{speed:.2f} km/h", delta=s_delta)
         st.metric("Azimuth", f"{pointing_data['azimuth']:.2f} °")
         st.metric("Elevation Angle", f"{pointing_data['elevation']:.2f} °")
@@ -261,12 +261,12 @@ def display_dash(df):
                 rows=2, cols=2,
                 shared_xaxes=False,
                 # vertical_spacing=0.03,
-                subplot_titles=("Voltage (V) over Time", "Altitude (m) over time", "Temperature (°C) over time",  "Pressure (hPa) over Temperature (°C)")
+                subplot_titles=("Voltage (V) over Time", "Altitude (m) over time", "Temperature (°C) over time",  "Altitude (m) over Temperature (°C)")
             )
         voltage_chart = px.line(df, x='time', y='voltage', title="Voltage (V) over Time", color="type", markers=True)
         temp_chart = px.line(df, x='time', y='temperature', title="Temperature (C) over Time", color='type', markers=True)
         alt_chart = px.line(df, x='time', y='altitude', title="Altitude (m) over Time", color='type', markers=True)
-        press_temp_chart = px.line(df, x='temperature', y='pressure', title="Pressure over Temperature", color='type', markers=True)
+        press_temp_chart = px.line(df, x='temperature', y='altitude', title="Altitude (m) over Temperature (°C)", color='type', markers=True)
 
         for trace in voltage_chart['data']:
             fig.add_trace(trace.update(showlegend=False), row=1, col=1)
