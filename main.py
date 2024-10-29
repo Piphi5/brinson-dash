@@ -162,6 +162,8 @@ battery_bounds = 6
 
 def get_metric_delta(df, column):
     df_cleaned =  df.dropna(subset=[column])
+    if df_cleaned.empty:
+        return 0.0, 0.0
     prev_type = df_cleaned['type'].iloc[-1]
     filt_df = df_cleaned[df_cleaned['type'] == prev_type]
     if not filt_df.empty:
@@ -173,7 +175,7 @@ def get_metric_delta(df, column):
             prev_datapoint = datapoint
         return datapoint, round(datapoint - prev_datapoint, 2)
     else:
-        return None, 0.0
+        return 0.0, 0.0
 
 import folium
 from streamlit_folium import st_folium
@@ -352,6 +354,8 @@ try:
             st.text("No current data found. Try using historical.")
 except Exception as e:
     print(e)
+    import traceback
+    traceback.print_exc()
 
 print(st.session_state.wait_time)
 time.sleep(st.session_state.wait_time)
